@@ -1,0 +1,90 @@
+{% extends "layouts/_default.html" %}
+{% load partials %}
+{% block content %}
+<h1 class="mb-6 text-3xl">Django Starter Template</h1>
+<div>
+    <h2 class="text-xl mb-4">Test HTMX and django-partials</h2>
+    <p>This is a starter template for Django projects with Tailwind CSS, HTMX, Docker, and more!</p>
+    <button class="btn btn-primary max-w-lg"
+            hx-get="{% url 'test-partial' %}"
+            hx-target="this"
+            hx-swap="outerHTML">Click me to test HTMX and django-partials</button>
+    {% partialdef test-partial %}
+    <div role="alert" class="alert alert-success max-w-lg">
+        <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 shrink-0 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>HTMX and django-partials is working!</span>
+    </div>
+{% endpartialdef %}
+</div>
+<div>
+    <h2 class="text-xl mb-4">Test Cotton</h2>
+    <c-card title="Cotton Card" url="home">
+    If you see a formatted card, then the cotton components are working!
+    </c-card>
+    <c-card title="Skeleton Loader" url="">
+        <a class="btn btn-tertiary"
+        href=""
+        hx-get="{% url 'test-skeleton-hx' %}"
+        hx-target="#test"
+        hx-indicator=".skeleton-wrapper">Load content inside skeleton loader</a>
+        <div id="test" class="bg-base-200 p-4 rounded-lg max-w-lg mt-4">
+            <c-skeleton-wrapper>
+            <p>This content swap should be animated with skeleton loading.</p>
+            </c-skeleton-wrapper>
+            {% partialdef skeleton-partial %}
+            <c-skeleton-wrapper>
+            <p>If you saw the skeleton loading animation, then it works!</p>
+            </c-skeleton-wrapper>
+            {% endpartialdef %}
+        </div>
+    </c-card>
+</div>
+{% if user.is_authenticated %}
+<div>
+    <h2 class="text-xl mb-4">Test Alpine.js</h2>
+    <p>Test this counter alpine component</p>
+    <c-counter/>
+</div>
+<!-- Image Upload Section -->
+<div class="mb-8">
+    <h2 class="text-xl mb-4">Test Image Upload</h2>
+    <form hx-post="{% url 'test-image-hx' %}"
+            hx-target="#image-list"
+            hx-swap="outerHTML"
+            enctype="multipart/form-data"
+            class="flex gap-4 items-end">
+        {% csrf_token %}
+        <input type="file"
+                name="image"
+                accept="image/*"
+                class="file-input file-input-bordered w-full max-w-xs" />
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</div>
+{% partialdef image-list inline=True %}
+<div id="image-list" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    {% for image in images %}
+        <div class="card bg-base-200">
+            <figure class="px-4 pt-4">
+                <img src="{{ image.image.url }}"
+                     alt="Uploaded at {{ image.uploaded_at|date:'Y-m-d H:i' }}"
+                     class="rounded-xl"
+                     width="300"
+                     height="300" />
+            </figure>
+            <div class="card-body">
+                <p class="text-sm opacity-70">{{ image.uploaded_at|date:'Y-m-d H:i' }}</p>
+            </div>
+        </div>
+    {% empty %}
+        <p class="col-span-full text-center opacity-70">No images uploaded yet.</p>
+    {% endfor %}
+</div>
+{% endpartialdef %}
+{% endif %}
+{% endblock content %}

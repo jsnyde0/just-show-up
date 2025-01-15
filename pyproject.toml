@@ -1,0 +1,51 @@
+[project]
+name = "django-starter"
+version = "0.1.0"
+description = "Starter project for Django with Docker, Postgres, HTMX, and more."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dj-database-url>=2.3.0",
+    "django>=5.1.4",
+    "django-admin-honeypot-updated-2021>=1.2.0",
+    "django-allauth>=65.3.1",
+    "django-cloudinary-storage>=0.3.0",
+    "django-cotton>=1.5.2",
+    "django-debug-toolbar>=5.0.1",
+    "django-environ>=0.11.2",
+    "django-htmx>=1.21.0",
+    "django-template-partials>=24.4",
+    "djlint>=1.36.4",
+    "gunicorn>=23.0.0",
+    "pillow>=11.1.0",
+    "pre-commit>=4.0.1",
+    "psycopg2-binary>=2.9.10",
+    "pytest>=8.3.4",
+    "ruff>=0.9.0",
+    "whitenoise>=6.8.2",
+]
+
+[tool.ruff]
+# Basic settings
+line-length = 88
+target-version = "py312"
+
+# Essential rules for your current codebase
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # bugbear
+]
+
+# Directories to ignore
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

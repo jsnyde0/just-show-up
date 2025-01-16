@@ -1,7 +1,13 @@
 {% extends "layouts/_default.html" %}
 {% load partials %}
 {% block content %}
-<h1 class="mb-6 text-3xl">Django Starter Template</h1>
+<h1 class="mb-6 text-3xl">Just Show Up to these Events</h1>
+
+<!-- Product Grid -->
+<div class="w-full md:w-3/4 p-4">
+    <c-event-list/>
+</div>
+
 <div>
     <h2 class="text-xl mb-4">Test HTMX and django-partials</h2>
     <p>This is a starter template for Django projects with Tailwind CSS, HTMX, Docker, and more!</p>

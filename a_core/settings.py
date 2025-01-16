@@ -66,6 +66,8 @@ INSTALLED_APPS = [
     "django_htmx",
     "template_partials.apps.SimpleAppConfig",
     # local apps
+    "a_core",
+    "events",
     "pages",
 ]
 

@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 
+from events.models import Event
+
 from .models import TestImage
 
 
@@ -12,7 +14,8 @@ def home_view(request):
         images = TestImage.objects.filter(user=request.user)[:3]
     else:
         images = []
-    context = {"images": images}
+    events = Event.objects.all()
+    context = {"images": images, "events": events}
     return render(request, "pages/home.html", context)
 
 

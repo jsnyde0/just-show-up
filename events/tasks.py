@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from .crew import test_openai
+from .crewai.crew import test_openai
 
 
 @shared_task

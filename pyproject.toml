@@ -52,3 +52,8 @@ exclude = [
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[tool.pytest.ini_options]
+markers = [
+    "crewai: marks tests as crewai (deselect with '-m \"not crewai\"')",
+]

@@ -23,6 +23,7 @@ dependencies = [
     "pre-commit>=4.0.1",
     "psycopg2-binary>=2.9.10",
     "pytest>=8.3.4",
+    "pytest-django>=4.9.0",
     "redis>=5.2.1",
     "ruff>=0.9.0",
     "whitenoise>=6.8.2",
@@ -57,3 +58,4 @@ indent-style = "space"
 markers = [
     "crewai: marks tests as crewai (deselect with '-m \"not crewai\"')",
 ]
+DJANGO_SETTINGS_MODULE = "a_core.settings"

@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug App",
+            "name": "Attach to App",
             "type": "debugpy",
             "request": "attach",
             "connect": {

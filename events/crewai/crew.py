@@ -1,6 +1,8 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
+from .types import ResearchReport
+
 
 @CrewBase
 class TestCrewai:
@@ -33,7 +35,10 @@ class TestCrewai:
 
     @task
     def reporting_task(self) -> Task:
-        return Task(config=self.tasks_config["reporting_task"], output_file="report.md")
+        return Task(
+            config=self.tasks_config["reporting_task"],
+            output_model=ResearchReport,
+        )
 
     @crew
     def crew(self) -> Crew:

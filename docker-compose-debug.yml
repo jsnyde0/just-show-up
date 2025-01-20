@@ -1,0 +1,66 @@
+services:
+  app:
+    build: .
+    image: app-image
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?connect_timeout=1
+    ports:
+      - "8000:8000"
+      - "5678:5678"  # Debugger port
+    volumes:
+      - .:/app  # Mount entire project directory
+      - /app/.venv  # Exclude virtual environment
+      - /app/node_modules  # Exclude node_modules
+    command: ["./debug_app.sh"]
+    # command: ["sh", "-c", "ls -la /app && cat /app/start.sh && ./start.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 1s
+      timeout: 1s
+      retries: 2
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 1s
+      retries: 2
+
+  celery:
+    image: app-image
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?connect_timeout=1
+    command: ["celery", "-A", "a_core", "worker", "-E", "-l", "info"]
+    depends_on:
+      - app
+      - redis
+      - db
+
+volumes:
+  postgres_data:
+  redis_data:

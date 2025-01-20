@@ -81,6 +81,13 @@ While the entrypoint script handles initial setup tasks, you may need to run oth
   cd .. && docker compose exec app python manage.py collectstatic --noinput
   ```
 
+### Debugging
+
+Run command below to debug the app with docker compose, then attach the debugger in VSCode (with 'Debug App' configuration).
+```bash
+docker compose -f docker-compose.yml -f docker-compose-debug.yml up --build
+```
+
 ## Detailed Setup
 
 ### Running Without Docker

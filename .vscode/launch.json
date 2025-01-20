@@ -17,6 +17,21 @@
                 "remoteRoot": "/app"
             }],
             "django": true
+        },
+        {
+            "name": "Attach to Celery",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 6900
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/app"
+                }
+            ]
         }
     ]
 }

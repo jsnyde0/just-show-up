@@ -60,3 +60,4 @@ markers = [
     "agentic: marks tests as agentic (deselect with '-m \"not agentic\"')",
 ]
 DJANGO_SETTINGS_MODULE = "a_core.settings"
+addopts = "-m 'not agentic'"

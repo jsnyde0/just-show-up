@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "celery>=5.4.0",
-    "crewai>=0.95.0",
+    "controlflow>=0.11.4",
     "debugpy>=1.8.12",
     "dj-database-url>=2.3.0",
     "django>=5.1.4",
@@ -57,6 +57,6 @@ indent-style = "space"
 
 [tool.pytest.ini_options]
 markers = [
-    "crewai: marks tests as crewai (deselect with '-m \"not crewai\"')",
+    "agentic: marks tests as agentic (deselect with '-m \"not agentic\"')",
 ]
 DJANGO_SETTINGS_MODULE = "a_core.settings"

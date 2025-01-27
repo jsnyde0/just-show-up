@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import event_detail, test_celery, test_crewai, test_event, test_openai
+from .views import event_detail, test_celery, test_event, test_openai
 
 app_name = "events"
 
@@ -9,5 +9,5 @@ urlpatterns = [
     path("<int:pk>/", event_detail, name="event_detail"),
     path("test-celery/", test_celery, name="test_celery"),
     path("test-openai/", test_openai, name="test_openai"),
-    path("test-crewai/", test_crewai, name="test_crewai"),
+    # path("test-crewai/", test_crewai, name="test_crewai"),
 ]

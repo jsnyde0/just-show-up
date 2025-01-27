@@ -1,7 +1,7 @@
 # from django.shortcuts import render
 from django.http import HttpResponse
 
-from .tasks import example_event_task, test_openai_task
+from .tasks import example_event_task, test_agentic_event_scraping, test_openai_task
 
 
 # Create your views here.
@@ -25,6 +25,6 @@ def test_openai(request):
     return HttpResponse("OpenAI task started")
 
 
-# def test_crewai(request):
-#     test_crewai_task.delay()
-#     return HttpResponse("CrewAI task started")
+def test_agentic(request):
+    test_agentic_event_scraping.delay()
+    return HttpResponse("Started agentic event scraping...")

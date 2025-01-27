@@ -1,4 +1,9 @@
+import json
+
 from celery import shared_task
+
+from .agentic.flow import scrape_siegessaeule_events
+from .agentic.utils import get_urls_next_days
 
 
 @shared_task
@@ -12,8 +17,22 @@ def test_openai_task():
     print("We should be running a crew but not implemented yet...")
 
 
-# @shared_task
-# def test_crewai_task():
-#     inputs = {"topic": "Agentic AI applications with Django and Celery"}
-#     result = TestCrewai().crew().kickoff(inputs=inputs)
-#     return result.to_dict()
+@shared_task
+def test_agentic_event_scraping():
+    # set up urls
+    urls = get_urls_next_days(2)
+    print("Generated URLs:")
+    for url in urls:
+        print(f"- {url}")
+
+    # scrape events
+    events = []
+    for url in urls:
+        events.extend(scrape_siegessaeule_events(url))
+
+    # convert to json?
+    event_json = json.dumps(
+        [event.model_dump() for event in events], indent=2, default=str
+    )
+    print(event_json)
+    return event_json

@@ -1,55 +1,27 @@
-from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, crew, task
+import controlflow as cf
 
-from .types import ResearchReport
+from .tools.custom_tool import scrape_event_details, scrape_sex_clubs_events
+from .types import EventBasic, EventFull
 
 
-@CrewBase
-class TestCrewai:
-    """TestCrewai crew"""
+@cf.flow
+def scrape_siegessaeule_events(url: str) -> list[EventFull]:
+    basic_events = cf.run(
+        objective="Scrape events from the provided URL",
+        instructions="Identify the events on the page of the provided URL and \
+            return the title, summary, and full detail URL for each event",
+        context={"url": url},
+        tools=[scrape_sex_clubs_events],
+        result_type=list[EventBasic],
+    )
 
-    # Learn more about YAML configuration files here:
-    # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-    # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
-    agents_config = "config/agents.yaml"
-    tasks_config = "config/tasks.yaml"
+    full_events = cf.run(
+        objective="Enrich the events with data from their detail pages",
+        instructions="Scrape the main content of each event detail page \
+                      to enrich the event data",
+        context={"events": basic_events},
+        tools=[scrape_event_details],
+        result_type=list[EventFull],
+    )
 
-    # If you would like to add tools to your agents, you can learn more about it here:
-    # https://docs.crewai.com/concepts/agents#agent-tools
-    @agent
-    def researcher(self) -> Agent:
-        return Agent(config=self.agents_config["researcher"], verbose=True)
-
-    @agent
-    def reporting_analyst(self) -> Agent:
-        return Agent(config=self.agents_config["reporting_analyst"], verbose=True)
-
-    # To learn more about structured task outputs,
-    # task dependencies, and task callbacks, check out the documentation:
-    # https://docs.crewai.com/concepts/tasks#overview-of-a-task
-    @task
-    def research_task(self) -> Task:
-        return Task(
-            config=self.tasks_config["research_task"],
-        )
-
-    @task
-    def reporting_task(self) -> Task:
-        return Task(
-            config=self.tasks_config["reporting_task"],
-            output_model=ResearchReport,
-        )
-
-    @crew
-    def crew(self) -> Crew:
-        """Creates the TestCrewai crew"""
-        # To learn adding knowledge sources to your crew, check out the documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
-
-        return Crew(
-            agents=self.agents,  # Automatically created by the @agent decorator
-            tasks=self.tasks,  # Automatically created by the @task decorator
-            process=Process.sequential,
-            verbose=True,
-            # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
-        )
+    return full_events

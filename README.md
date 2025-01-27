@@ -22,9 +22,9 @@ A starter project for Django with Docker, PostgreSQL, HTMX, and more.
    uv run pre-commit install
    ```
 
-3. **Start the Docker environment**:
+3. **Start the Docker environment for local development**:
    ```bash
-   docker compose up -d
+   docker compose -f docker-compose.yml -f docker-compose.local.yml up
    ```
 
    This will automatically apply migrations, create a superuser (if credentials are provided in the `.env` file), and collect static files.
@@ -55,7 +55,12 @@ While the entrypoint script handles initial setup tasks, you may need to run oth
 
 - **Run Tests**:
   ```bash
-  docker compose exec app python manage.py test
+  docker compose exec app pytest
+  ```
+
+  Or if you want to run without expensive LLM calls:
+  ```bash
+  docker compose exec app pytest -m "not agentic"
   ```
 
 - **Collect Static Files**:
@@ -130,7 +135,7 @@ If you want to use Google's SMTP server, you need to create an app password for 
 
 - **Run tests**:
   ```bash
-  docker compose exec app python manage.py test
+  docker compose exec app pytest
   ```
 - **Run code formatting**:
   ```bash

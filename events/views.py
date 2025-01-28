@@ -26,5 +26,9 @@ def test_openai(request):
 
 
 def test_agentic(request):
-    test_agentic_event_scraping.delay()
-    return HttpResponse("Started agentic event scraping...")
+    days = 1
+    task = test_agentic_event_scraping.delay(days)
+    return HttpResponse(
+        f"Started agentic event scraping for next {days} days... \
+                        (Task ID: {task.id})"
+    )

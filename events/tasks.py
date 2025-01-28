@@ -1,9 +1,9 @@
-import json
-
 from celery import shared_task
+from celery.utils.log import get_task_logger
 
-from .agentic.flow import scrape_siegessaeule_events
-from .agentic.utils import get_urls_next_days
+from .utils import save_events, scrape_events
+
+logger = get_task_logger(__name__)
 
 
 @shared_task
@@ -18,21 +18,21 @@ def test_openai_task():
 
 
 @shared_task
-def test_agentic_event_scraping():
-    # set up urls
-    urls = get_urls_next_days(2)
-    print("Generated URLs:")
-    for url in urls:
-        print(f"- {url}")
+def test_agentic_event_scraping(days: int = 2):
+    """Scrape events and save them to the database."""
+    logger.info(f"Starting event scraping for next {days} days")
 
-    # scrape events
-    events = []
-    for url in urls:
-        events.extend(scrape_siegessaeule_events(url))
+    try:
+        # 1. Scrape events
+        events = scrape_events(days)
+        logger.info(f"Scraped {len(events)} events")
 
-    # convert to json?
-    event_json = json.dumps(
-        [event.model_dump() for event in events], indent=2, default=str
-    )
-    print(event_json)
-    return event_json
+        # 2. Save to database
+        saved_count = save_events(events)
+        logger.info(f"Saved {saved_count} events")
+
+        return saved_count
+
+    except Exception as e:
+        logger.error(f"Error in scraping task: {e}")
+        raise

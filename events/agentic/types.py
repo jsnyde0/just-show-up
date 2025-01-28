@@ -39,7 +39,7 @@ class EventFull(EventBasic):
     start_time: datetime = Field(..., description="When the event starts")
     end_time: Optional[datetime] = Field(None, description="When the event ends")
     organizer: Optional[str] = Field(None, description="Who is organizing the event")
-    event_url: Optional[HttpUrl] = Field(
+    source_url: Optional[HttpUrl] = Field(
         None, description="External URL (e.g., Facebook event, venue website)"
     )
     image_url: Optional[HttpUrl] = Field(

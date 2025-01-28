@@ -9,12 +9,12 @@
 </div>
 
 <div>
-    <h2 class="text-xl mb-4">Test HTMX and django-partials</h2>
-    <p>This is a starter template for Django projects with Tailwind CSS, HTMX, Docker, and more!</p>
+    <h2 class="text-xl mb-4">Test Celery Task</h2>
+    <p>Clicking the button below should start a trivial celery task!</p>
     <button class="btn btn-primary max-w-lg"
-            hx-get="{% url 'test-partial' %}"
+            hx-get="{% url 'events:test_celery' %}"
             hx-target="this"
-            hx-swap="outerHTML">Click me to test HTMX and django-partials</button>
+            hx-swap="outerHTML">Click me to run a trivial Celery task</button>
     {% partialdef test-partial %}
     <div role="alert" class="alert alert-success max-w-lg">
         <svg xmlns="http://www.w3.org/2000/svg"
@@ -26,6 +26,20 @@
         <span>HTMX and django-partials is working!</span>
     </div>
 {% endpartialdef %}
+    <h2 class="text-xl mb-4">Test OpenAI</h2>
+    <p>Clicking the button below should start a openai test with celery!</p>
+    <button class="btn btn-primary max-w-lg"
+            hx-get="{% url 'events:test_openai' %}"
+            hx-target="this"
+            hx-swap="outerHTML">Click me to test OpenAI with Celery</button>
+
+    <h2 class="text-xl mb-4">Test Agentic Event Scraping</h2>
+    <p>Clicking the button below should start agentic scraping with controlflow and celery!</p>
+    <button class="btn btn-primary max-w-lg"
+            hx-get="{% url 'events:test_agentic' %}"
+            hx-target="this"
+            hx-swap="outerHTML">Click me to test Agentic event scraping</button>
+
 </div>
 <div>
     <h2 class="text-xl mb-4">Test Cotton</h2>

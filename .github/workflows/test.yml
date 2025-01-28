@@ -6,24 +6,52 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
+      - name: Set up Docker Compose
+        run: sudo apt-get -y install docker-compose
 
-      - name: "Set up Python"
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: "pyproject.toml"
-
-      - name: Install the project
-        run: uv sync --all-extras --dev
+      - name: Build and start containers
+        run: docker compose --env-file /dev/null -f docker-compose.yml -f docker-compose.ci.yml up -d
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+          DEBUG: "True"
+          ALLOWED_HOSTS: "localhost 127.0.0.1 testserver"
+          CSRF_TRUSTED_ORIGINS: "http://localhost http://127.0.0.1"
+          DJANGO_SUPERUSER_USERNAME: "admin"
+          DJANGO_SUPERUSER_EMAIL: "admin@example.com"
+          DJANGO_SUPERUSER_PASSWORD: "testpass123"
+          CELERY_BROKER_URL: "redis://redis:6379/0"
 
       - name: Run tests
-        run: uv run pytest tests
+        run: docker compose exec app pytest
 
       - name: Run Ruff
-        run: |
-          uv run ruff check .
-          uv run ruff format --check .
+        run: docker compose exec app sh -c "uv run ruff check . && uv run ruff format --check ."

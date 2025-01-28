@@ -22,9 +22,9 @@ A starter project for Django with Docker, PostgreSQL, HTMX, and more.
    uv run pre-commit install
    ```
 
-3. **Start the Docker environment**:
+3. **Start the Docker environment for local development**:
    ```bash
-   docker compose up -d
+   docker compose -f docker-compose.yml -f docker-compose.local.yml up
    ```
 
    This will automatically apply migrations, create a superuser (if credentials are provided in the `.env` file), and collect static files.
@@ -55,7 +55,12 @@ While the entrypoint script handles initial setup tasks, you may need to run oth
 
 - **Run Tests**:
   ```bash
-  docker compose exec app python manage.py test
+  docker compose exec app pytest
+  ```
+
+  Or if you want to run without expensive LLM calls:
+  ```bash
+  docker compose exec app pytest -m "not agentic"
   ```
 
 - **Collect Static Files**:
@@ -80,6 +85,23 @@ While the entrypoint script handles initial setup tasks, you may need to run oth
   npm run minify
   cd .. && docker compose exec app python manage.py collectstatic --noinput
   ```
+
+### Debugging
+
+To debug the application with VSCode using Docker Compose:
+
+1. **Start Services in Debug Mode**:
+   ```bash
+   docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build
+   ```
+
+2. **Attach Debuggers in VSCode**:
+   - **Django App**: Select 'Attach to App' and press `F5`.
+   - **Celery Worker**: Select 'Attach to Celery' and press `F5`.
+
+> **Note**: Both services will wait for the debugger to attach before starting.
+
+This setup allows you to debug both the Django application and the Celery worker effectively.
 
 ## Detailed Setup
 
@@ -113,7 +135,7 @@ If you want to use Google's SMTP server, you need to create an app password for 
 
 - **Run tests**:
   ```bash
-  docker compose exec app python manage.py test
+  docker compose exec app pytest
   ```
 - **Run code formatting**:
   ```bash

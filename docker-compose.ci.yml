@@ -1,0 +1,25 @@
+services:
+  app:
+    environment:
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost 127.0.0.1 testserver
+      - CSRF_TRUSTED_ORIGINS=http://localhost http://127.0.0.1
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@example.com
+      - DJANGO_SUPERUSER_PASSWORD=abc123
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?connect_timeout=1
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    env_file: []  # Explicit empty array
+    command: ["tail", "-f", "/dev/null"]  # Keep container running without running a server
+
+  db:
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  celery:
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?connect_timeout=1
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    env_file: []

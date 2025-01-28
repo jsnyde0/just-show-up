@@ -5,6 +5,9 @@ description = "Starter project for Django with Docker, Postgres, HTMX, and more.
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "celery>=5.4.0",
+    "controlflow>=0.11.4",
+    "debugpy>=1.8.12",
     "dj-database-url>=2.3.0",
     "django>=5.1.4",
     "django-admin-honeypot-updated-2021>=1.2.0",
@@ -21,6 +24,8 @@ dependencies = [
     "pre-commit>=4.0.1",
     "psycopg2-binary>=2.9.10",
     "pytest>=8.3.4",
+    "pytest-django>=4.9.0",
+    "redis>=5.2.1",
     "ruff>=0.9.0",
     "whitenoise>=6.8.2",
 ]
@@ -49,3 +54,10 @@ exclude = [
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[tool.pytest.ini_options]
+markers = [
+    "agentic: marks tests as agentic (deselect with '-m \"not agentic\"')",
+]
+DJANGO_SETTINGS_MODULE = "a_core.settings"
+addopts = "-m 'not agentic'"

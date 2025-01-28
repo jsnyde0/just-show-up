@@ -1,6 +1,6 @@
-# Django Starter
+# Just Show Up
 
-A starter project for Django with Docker, PostgreSQL, HTMX, and more.
+An agentic AI scraping project to learn to work with AI agents.
 
 ## Quick Start
 
@@ -13,8 +13,8 @@ A starter project for Django with Docker, PostgreSQL, HTMX, and more.
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/django-starter.git
-   cd django-starter
+   git clone [https://github.com/yourusername/django-starter.git](https://github.com/jsnyde0/just-show-up/)
+   cd just-show-up
    ```
 
 2. **Install pre-commit hooks**:
@@ -102,34 +102,6 @@ To debug the application with VSCode using Docker Compose:
 > **Note**: Both services will wait for the debugger to attach before starting.
 
 This setup allows you to debug both the Django application and the Celery worker effectively.
-
-## Detailed Setup
-
-### Running Without Docker
-
-If you prefer to run without Docker, you will need to set up a PostgreSQL database locally and update your `.env` file accordingly. Follow these steps:
-
-1. Set up a PostgreSQL database locally.
-2. Run migrations:
-   ```bash
-   uv run python manage.py migrate
-   ```
-3. Create superuser:
-   ```bash
-   uv run python manage.py createsuperuser
-   ```
-4. Run development server:
-   ```bash
-   uv run python manage.py runserver
-   ```
-
-## Email Setup
-
-For email notifications to work, you need to:
-- Set up an email account and add the credentials to the `.env` file.
-- Set the domain your app is running on in the Django admin -> Sites -> Sites -> example.com.
-
-If you want to use Google's SMTP server, you need to create an app password for the account you want to use and add it to the `.env` file.
 
 ## Quality Checks
 
